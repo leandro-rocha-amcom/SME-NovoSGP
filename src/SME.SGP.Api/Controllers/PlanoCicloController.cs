@@ -20,6 +20,7 @@ namespace SME.SGP.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            //teste
             return Ok();
         }
 
