@@ -18,6 +18,8 @@ namespace SME.SGP.Aplicacao.Integracoes
         {
 
             //TESTE
+            //TESTE 2
+
             var resposta = httpClient.GetAsync("v1/learning_objectives").Result;
             if (resposta.IsSuccessStatusCode)
             {
