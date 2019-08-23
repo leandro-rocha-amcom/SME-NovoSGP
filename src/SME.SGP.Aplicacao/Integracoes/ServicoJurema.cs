@@ -16,6 +16,8 @@ namespace SME.SGP.Aplicacao.Integracoes
 
         public IEnumerable<ObjetivoAprendizagemResposta> ObterListaObjetivosAprendizagem()
         {
+
+            //TESTE
             var resposta = httpClient.GetAsync("v1/learning_objectives").Result;
             if (resposta.IsSuccessStatusCode)
             {
