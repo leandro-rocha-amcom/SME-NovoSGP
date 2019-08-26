@@ -26,6 +26,8 @@ namespace SME.SGP.Integracao.Teste
         {
             _fixture._clientApi.DefaultRequestHeaders.Clear();
 
+            //
+
             var planoDeCicloDto = new PlanoCicloDto();
             planoDeCicloDto.Ano = 2019;
             planoDeCicloDto.CicloId = 1;
