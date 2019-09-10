@@ -12,7 +12,7 @@ namespace SME.SGP.Dados.Contexto
 
         public SgpContext(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
-            Conexao = new NpgsqlConnection(configuration.GetConnectionString("SGP-Postgres"));
+            Conexao = new NpgsqlConnection("Host=localhost;Port=5432;Database=sme_sgp;Username=postgres;Password=postgres;");
             Open();
             this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }

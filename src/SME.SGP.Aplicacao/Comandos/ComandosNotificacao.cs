@@ -1,6 +1,7 @@
 ﻿using SME.SGP.Dominio;
 using SME.SGP.Dominio.Interfaces;
 using SME.SGP.Dto;
+using System.Collections.Generic;
 
 namespace SME.SGP.Aplicacao
 {
@@ -11,6 +12,11 @@ namespace SME.SGP.Aplicacao
         public ComandosNotificacao(IRepositorioNotificacao repositorioNotificacao)
         {
             this.repositorioNotificacao = repositorioNotificacao ?? throw new System.ArgumentNullException(nameof(repositorioNotificacao));
+        }
+
+        public void AtualizarParaLida(IEnumerable<long> notificacaoId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void Salvar(NotificacaoDto notificacaoDto)

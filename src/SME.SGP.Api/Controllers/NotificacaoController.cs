@@ -20,6 +20,15 @@ namespace SME.SGP.Api.Controllers
             this.consultasNotificacao = consultasNotificacao ?? throw new System.ArgumentNullException(nameof(consultasNotificacao));
         }
 
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
+        public IActionResult AtualizarParaLida([FromBody]IEnumerable<long> notificacaoId)
+        {
+            comandosNotificacao.AtualizarParaLida(notificacaoId);
+            return Ok();
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<NotificacaoBasicaDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]

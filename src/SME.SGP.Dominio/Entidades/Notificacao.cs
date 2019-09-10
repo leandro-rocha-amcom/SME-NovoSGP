@@ -30,5 +30,7 @@
             }
             else return false;
         }
+
+        public bool VerificarSeStatusJaEstaComoLida(NotificacaoStatus status) => Status == status;
     }
 }
