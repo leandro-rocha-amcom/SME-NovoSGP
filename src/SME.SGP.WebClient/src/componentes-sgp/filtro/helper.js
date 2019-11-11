@@ -52,10 +52,10 @@ export default class FiltroHelper {
       .catch(() => periodos);
   }
 
-  static async ObtenhaDres(modalidade, periodo) {
+  static async ObtenhaDres(modalidade) {
     const dres = [];
 
-    return await ServicoFiltro.listarDres(modalidade, periodo)
+    return await ServicoFiltro.listarDres(modalidade)
       .then(resposta => {
         if (resposta.data) {
           resposta.data.forEach(dre => {
@@ -71,10 +71,10 @@ export default class FiltroHelper {
       .catch(() => dres);
   }
 
-  static async ObtenhaUnidadesEscolares(modalidade, dre, periodo) {
+  static async ObtenhaUnidadesEscolares(modalidade, dre) {
     const unidadesEscolares = [];
 
-    return await ServicoFiltro.listarUnidadesEscolares(dre, modalidade, periodo)
+    return await ServicoFiltro.listarUnidadesEscolares(dre, modalidade)
       .then(resposta => {
         if (resposta.data) {
           resposta.data.forEach(unidade => {
@@ -89,10 +89,10 @@ export default class FiltroHelper {
       .catch(() => unidadesEscolares);
   }
 
-  static async ObtenhaTurmas(modalidade, unidadeEscolar, periodo) {
+  static async ObtenhaTurmas(modalidade, unidadeEscolar) {
     const turmas = [];
 
-    return await ServicoFiltro.listarTurmas(unidadeEscolar, modalidade, periodo)
+    return await ServicoFiltro.listarTurmas(unidadeEscolar, modalidade)
       .then(resposta => {
         if (resposta.data) {
           resposta.data.forEach(turma => {

@@ -32,13 +32,12 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   const [anoLetivo, setAnoLetivo] = useState('2019');
   const [idTipoCalendario, setIdTipoCalendario] = useState(0);
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
-  const valoresIniciaisForm = {
+  const [valoresIniciais, setValoresIniciais] = useState({
     situacao: true,
     nome: '',
     modalidade: '',
     periodo: '',
-  }
-  const [valoresIniciais, setValoresIniciais] = useState(valoresIniciaisForm);
+  });
 
   const [validacoes] = useState(
     Yup.object({
@@ -189,18 +188,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     }
   };
 
-  const validaAntesDoSubmit = form => {    
-    const arrayCampos = Object.keys(valoresIniciaisForm);
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
-    form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length == 0) {
-        form.handleSubmit(e => e);
-      }      
-    });
-  };
-
   return (
     <>
       <Cabecalho
@@ -250,7 +237,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                   border
                   bold
                   className="mr-2"
-                  onClick={()=> validaAntesDoSubmit(form)}
+                  type="submit"
                   disabled={desabilitarCampos}
                 />
               </div>

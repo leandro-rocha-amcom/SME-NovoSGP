@@ -26,18 +26,17 @@ const TipoFeriadoForm = ({ match }) => {
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
   const [idTipoFeriadoEdicao, setIdTipoFeriadoEdicao] = useState(0);
   const [isTipoMovel, setIsTipoMovel] = useState(false);
-  
+
   const usuario = store.getState().usuario;
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
-  
-  const valoresIniciaisForm = {
+
+  const [valoresIniciais, setValoresIniciais] = useState({
     nome: '',
     abrangencia: undefined,
     tipo: 1,
     dataFeriado: '',
     situacao: true,
-  }  
-  const [valoresIniciais, setValoresIniciais] = useState(valoresIniciaisForm);
+  });
 
   const listaDropdownAbrangencia = [
     { id: 1, nome: 'Nacional' },
@@ -224,18 +223,6 @@ const TipoFeriadoForm = ({ match }) => {
     );
   };
 
-  const validaAntesDoSubmit = form => {    
-    const arrayCampos = Object.keys(valoresIniciais);
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
-    form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length == 0) {
-        form.handleSubmit(e => e);
-      }      
-    });
-  };
-
   return (
     <>
       <Cabecalho
@@ -289,7 +276,7 @@ const TipoFeriadoForm = ({ match }) => {
                     (!novoRegistro && !permissoesTela.podeAlterar)
                   }
                   className="mr-2"
-                  onClick={()=> validaAntesDoSubmit(form)}
+                  type="submit"
                 />
               </div>
 

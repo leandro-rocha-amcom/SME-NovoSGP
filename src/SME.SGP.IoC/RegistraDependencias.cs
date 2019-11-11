@@ -11,7 +11,6 @@ using SME.SGP.Dados.Repositorios;
 using SME.SGP.Dominio;
 using SME.SGP.Dominio.Interfaces;
 using SME.SGP.Dominio.Servicos;
-using SME.SGP.Infra;
 
 namespace SME.SGP.IoC
 {
@@ -117,7 +116,6 @@ namespace SME.SGP.IoC
             services.TryAddScoped<IServicoFeriadoCalendario, ServicoFeriadoCalendario>();
             services.TryAddScoped<IServicoAbrangencia, ServicoAbrangencia>();
             services.TryAddScoped<IServicoEvento, ServicoEvento>();
-            services.TryAddScoped<IServicoLog, ServicoLog>();
         }
     }
 }

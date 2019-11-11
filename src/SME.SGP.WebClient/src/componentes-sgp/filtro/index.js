@@ -30,7 +30,6 @@ import {
 } from '~/redux/modulos/filtro/actions';
 import FiltroHelper from './helper';
 import { erro } from '~/servicos/alertas';
-import modalidade from '~/dtos/modalidade';
 
 const Filtro = () => {
   const [alternarFocoCampo, setAlternarFocoCampo] = useState(false);
@@ -42,7 +41,10 @@ const Filtro = () => {
   const campoBuscaRef = useRef();
 
   const usuarioStore = useSelector(state => state.usuario);
-  const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
+  const [turmaUsuarioSelecionada, setTurmaUsuarioSelecionada] = useState(
+    usuarioStore.turmaSelecionada
+  );
+
   const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] = useState(
     true
   );
@@ -63,25 +65,23 @@ const Filtro = () => {
   const anosLetivoStore = useSelector(state => state.filtro.anosLetivos);
   const [anosLetivos, setAnosLetivos] = useState(anosLetivoStore);
   const [anoLetivoSelecionado, setAnoLetivoSelecionado] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.anoLetivo : ''
+    turmaUsuarioSelecionada.anoLetivo
   );
 
   const modalidadesStore = useSelector(state => state.filtro.modalidades);
   const [modalidades, setModalidades] = useState(modalidadesStore);
   const [modalidadeSelecionada, setModalidadeSelecionada] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.modalidade : ''
+    turmaUsuarioSelecionada.modalidade
   );
 
   const periodosStore = useSelector(state => state.filtro.periodos);
   const [periodos, setPeriodos] = useState(periodosStore);
-  const [periodoSelecionado, setPeriodoSelecionado] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.periodo : ''
-  );
+  const [periodoSelecionado, setPeriodoSelecionado] = useState();
 
   const dresStore = useSelector(state => state.filtro.dres);
   const [dres, setDres] = useState(dresStore);
   const [dreSelecionada, setDreSelecionada] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.dre : ''
+    turmaUsuarioSelecionada.dre
   );
 
   const unidadesEscolaresStore = useSelector(
@@ -91,17 +91,17 @@ const Filtro = () => {
     unidadesEscolaresStore
   );
   const [unidadeEscolarSelecionada, setUnidadeEscolarSelecionada] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.unidadeEscolar : ''
+    turmaUsuarioSelecionada.unidadeEscolar
   );
 
   const turmasStore = useSelector(state => state.filtro.turmas);
   const [turmas, setTurmas] = useState(turmasStore);
   const [turmaSelecionada, setTurmaSelecionada] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.turma : ''
+    turmaUsuarioSelecionada.turma
   );
 
   const [textoAutocomplete, setTextoAutocomplete] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.desc : ''
+    turmaUsuarioSelecionada.desc
   );
   const [resultadosFiltro, setResultadosFiltro] = useState([]);
 
@@ -115,15 +115,18 @@ const Filtro = () => {
 
   useEffect(() => {
     let estado = true;
-
-    setAnoLetivoSelecionado(turmaUsuarioSelecionada.anoLetivo);
-    setModalidadeSelecionada(turmaUsuarioSelecionada.modalidade);
-    setPeriodoSelecionado(turmaUsuarioSelecionada.periodo);
-    setDreSelecionada(turmaUsuarioSelecionada.dre);
-    setUnidadeEscolarSelecionada(turmaUsuarioSelecionada.unidadeEscolar);
-    setTurmaSelecionada(turmaUsuarioSelecionada.turma);
-    setTextoAutocomplete(turmaUsuarioSelecionada.desc);
-
+    if (
+      estado &&
+      typeof turmaUsuarioSelecionada === 'object' &&
+      Object.keys(turmaUsuarioSelecionada).length > 0
+    ) {
+      setAnoLetivoSelecionado(turmaUsuarioSelecionada.anoLetivo);
+      setModalidadeSelecionada(turmaUsuarioSelecionada.modalidade.toString());
+      setDreSelecionada(turmaUsuarioSelecionada.dre);
+      setUnidadeEscolarSelecionada(turmaUsuarioSelecionada.unidadeEscolar);
+      setTurmaSelecionada(turmaUsuarioSelecionada.turma);
+      setTextoAutocomplete(turmaUsuarioSelecionada.desc);
+    }
     return () => (estado = false);
   }, [turmaUsuarioSelecionada]);
 
@@ -163,34 +166,11 @@ const Filtro = () => {
       return;
     }
 
-    if (modalidadeSelecionada === modalidade.EJA.toString()) {
-      ObtenhaPeriodos(estado);
-      setCampoDreDesabilitado(true);
-    } else {
-      ObtenhaDres(estado);
-    }
+    ObtenhaPeriodos(estado);
+    ObtenhaDres(estado);
 
     return () => (estado = false);
   }, [modalidadeSelecionada]);
-
-  useEffect(() => {
-    if (periodos && periodos.length === 1)
-      setPeriodoSelecionado(periodos[0].valor);
-  }, [periodos]);
-
-  useEffect(() => {
-    let estado = true;
-
-    if (modalidadeSelecionada !== modalidade.EJA.toString()) return;
-
-    if (!periodoSelecionado) {
-      setDreSelecionada();
-      setCampoDreDesabilitado(true);
-      return;
-    }
-
-    ObtenhaDres(estado, periodoSelecionado);
-  }, [periodoSelecionado]);
 
   useEffect(() => {
     if (dres && dres.length === 1) setDreSelecionada(dres[0].valor);
@@ -205,12 +185,7 @@ const Filtro = () => {
       return;
     }
 
-    const periodo =
-      modalidadeSelecionada === modalidade.EJA.toString()
-        ? periodoSelecionado
-        : null;
-
-    ObtenhaUnidadesEscolares(estado, periodo);
+    ObtenhaUnidadesEscolares(estado);
 
     return () => (estado = false);
   }, [dreSelecionada]);
@@ -235,10 +210,7 @@ const Filtro = () => {
   }, [unidadeEscolarSelecionada]);
 
   useEffect(() => {
-    if (turmas && turmas.length === 1) {
-      setTurmaSelecionada(turmas[0].valor);
-      aplicarFiltro();
-    }
+    if (turmas && turmas.length === 1) setTurmaSelecionada(turmas[0].valor);
   }, [turmas]);
 
   const aplicarFiltro = () => {
@@ -258,11 +230,9 @@ const Filtro = () => {
       const unidadeEscolarDesc = unidadesEscolares.find(
         unidade => unidade.valor === unidadeEscolarSelecionada
       );
-
-      setTextoAutocomplete(
+      setTurmaUsuarioSelecionada(
         `${modalidadeDesc.desc} - ${turmaDesc.desc} - ${unidadeEscolarDesc.desc}`
       );
-
       setAlternarFocoBusca(false);
 
       const turmaSelecionadaCompleta = turmas.find(
@@ -277,7 +247,6 @@ const Filtro = () => {
         turma: turmaSelecionada,
         ano: turmaSelecionadaCompleta.ano,
         desc: `${modalidadeDesc.desc} - ${turmaDesc.desc} - ${unidadeEscolarDesc.desc}`,
-        periodo: periodoSelecionado ? periodoSelecionado : 0,
       };
 
       store.dispatch(turmasUsuario(turmas));
@@ -350,7 +319,7 @@ const Filtro = () => {
     if (estado) {
       store.dispatch(salvarAnosLetivos(anosLetivos));
       setAnosLetivos(anosLetivos);
-      setCampoAnoLetivoDesabilitado(anosLetivos.length === 1);
+      setCampoAnoLetivoDesabilitado(false);
     }
   };
 
@@ -360,41 +329,34 @@ const Filtro = () => {
     if (estado) {
       setModalidades([...modalidadesLista]);
       store.dispatch(salvarModalidades(modalidadesLista));
-      setCampoModalidadeDesabilitado(modalidadesLista.length === 1);
+      setCampoModalidadeDesabilitado(false);
     }
   };
 
   const ObtenhaPeriodos = async estado => {
     const periodos = await FiltroHelper.ObtenhaPeriodos(modalidadeSelecionada);
 
-    if (!modalidade) return;
-
     if (estado) {
       store.dispatch(salvarPeriodos(periodos));
       setPeriodos(periodos);
-      setCampoPeriodoDesabilitado(periodos.length === 1);
+      setCampoPeriodoDesabilitado(false);
     }
   };
 
-  const ObtenhaDres = async (estado, periodo) => {
-    if (!modalidadeSelecionada) return;
-
-    const dres = await FiltroHelper.ObtenhaDres(modalidadeSelecionada, periodo);
+  const ObtenhaDres = async estado => {
+    const dres = await FiltroHelper.ObtenhaDres(modalidadeSelecionada);
 
     if (estado) {
       store.dispatch(salvarDres(dres));
       setDres(dres);
-      setCampoDreDesabilitado(dres.length === 1);
+      setCampoDreDesabilitado(false);
     }
   };
 
-  const ObtenhaUnidadesEscolares = async (estado, periodo) => {
-    if (!modalidadeSelecionada) return;
-
+  const ObtenhaUnidadesEscolares = async estado => {
     const unidadesEscolares = await FiltroHelper.ObtenhaUnidadesEscolares(
       modalidadeSelecionada,
-      dreSelecionada,
-      periodo
+      dreSelecionada
     );
 
     if (!unidadesEscolares) {
@@ -407,22 +369,14 @@ const Filtro = () => {
     if (estado) {
       store.dispatch(salvarUnidadesEscolares(unidadesEscolares));
       setUnidadesEscolares(unidadesEscolares);
-      setCampoUnidadeEscolarDesabilitado(unidadesEscolares.length === 1);
+      setCampoUnidadeEscolarDesabilitado(false);
     }
   };
 
   const ObtenhaTurmas = async estado => {
-    const periodo =
-      modalidadeSelecionada === modalidade.EJA.toString()
-        ? periodoSelecionado
-        : null;
-
-    if (!modalidadeSelecionada) return;
-
     const turmas = await FiltroHelper.ObtenhaTurmas(
       modalidadeSelecionada,
-      unidadeEscolarSelecionada,
-      periodo
+      unidadeEscolarSelecionada
     );
 
     if (!turmas || turmas.length === 0) {
@@ -435,13 +389,12 @@ const Filtro = () => {
     if (estado) {
       store.dispatch(salvarTurmas(turmas));
       setTurmas(turmas);
-      setCampoTurmaDesabilitado(turmas.length === 1);
+      setCampoTurmaDesabilitado(false);
     }
   };
 
   const selecionaTurmaAutocomplete = resultado => {
-    setTextoAutocomplete(resultado.descricaoFiltro);
-
+    setTurmaUsuarioSelecionada(resultado.descricaoFiltro);
     const turma = {
       anoLetivo: resultado.anoLetivo,
       modalidade: resultado.codigoModalidade,
@@ -449,12 +402,9 @@ const Filtro = () => {
       unidadeEscolar: resultado.codigoUe,
       turma: resultado.codigoTurma,
       desc: resultado.descricaoFiltro,
-      periodo: resultado.semestre,
     };
-
     store.dispatch(selecionarTurma(turma));
     store.dispatch(turmasUsuario(turmas));
-
     setResultadosFiltro([]);
   };
 
@@ -539,8 +489,6 @@ const Filtro = () => {
   };
 
   const aoTrocarPeriodo = periodo => {
-    if (periodo !== periodoSelecionado) setDreSelecionada();
-
     setPeriodoSelecionado(periodo);
   };
 
@@ -562,24 +510,13 @@ const Filtro = () => {
 
   const removerTurmaSelecionada = () => {
     store.dispatch(removerTurma());
+    setTextoAutocomplete();
     setModalidadeSelecionada();
     setPeriodoSelecionado();
     setDreSelecionada();
     setUnidadeEscolarSelecionada();
     setTurmaSelecionada();
-    setTextoAutocomplete('');
-    setAnoLetivoSelecionado();
-
-    reabilitarCampos();
-  };
-
-  const reabilitarCampos = () => {
-    setCampoDreDesabilitado(false);
-    setCampoAnoLetivoDesabilitado(false);
-    setCampoModalidadeDesabilitado(false);
-    setCampoPeriodoDesabilitado(false);
-    setCampoTurmaDesabilitado(false);
-    setCampoUnidadeEscolarDesabilitado(false);
+    setTurmaUsuarioSelecionada();
   };
 
   return (
@@ -595,10 +532,10 @@ const Filtro = () => {
             onFocus={aoFocarBusca}
             onChange={onChangeAutocomplete}
             onKeyDown={aoPressionarTeclaBaixoAutocomplete}
-            readOnly={!!turmaUsuarioSelecionada.turma}
+            readOnly={!!turmaUsuarioSelecionada}
             value={textoAutocomplete}
           />
-          {!!turmaUsuarioSelecionada.turma && (
+          {turmaUsuarioSelecionada && turmaUsuarioSelecionada.length > 0 && (
             <Fechar
               className="fa fa-times position-absolute"
               onClick={removerTurmaSelecionada}
@@ -640,17 +577,13 @@ const Filtro = () => {
                   lista={anosLetivos}
                   valueOption="valor"
                   valueText="desc"
-                  valueSelect={
-                    anoLetivoSelecionado && `${anoLetivoSelecionado}`
-                  }
+                  valueSelect={anoLetivoSelecionado}
                   placeholder="Ano"
                   disabled={campoAnoLetivoDesabilitado}
                 />
               </Grid>
               <Grid
-                cols={
-                  modalidadeSelecionada === modalidade.EJA.toString() ? 5 : 9
-                }
+                cols={modalidadeSelecionada === '3' ? 5 : 9}
                 className="form-group"
               >
                 <SelectComponent
@@ -659,14 +592,12 @@ const Filtro = () => {
                   lista={modalidades}
                   valueOption="valor"
                   valueText="desc"
-                  valueSelect={
-                    modalidadeSelecionada && `${modalidadeSelecionada}`
-                  }
+                  valueSelect={modalidadeSelecionada}
                   placeholder="Modalidade"
                   disabled={campoModalidadeDesabilitado}
                 />
               </Grid>
-              {modalidadeSelecionada === modalidade.EJA.toString() && (
+              {modalidadeSelecionada === '3' && (
                 <Grid cols={4} className="form-group">
                   <SelectComponent
                     className="fonte-14"
@@ -674,7 +605,7 @@ const Filtro = () => {
                     lista={periodos}
                     valueOption="valor"
                     valueText="desc"
-                    valueSelect={periodoSelecionado && `${periodoSelecionado}`}
+                    valueSelect={periodoSelecionado}
                     placeholder="Período"
                     disabled={campoPeriodoDesabilitado}
                   />
@@ -688,7 +619,7 @@ const Filtro = () => {
                 lista={dres}
                 valueOption="valor"
                 valueText="desc"
-                valueSelect={dreSelecionada && `${dreSelecionada}`}
+                valueSelect={dreSelecionada}
                 placeholder="Diretoria Regional De Educação (DRE)"
                 disabled={campoDreDesabilitado}
               />
@@ -700,9 +631,7 @@ const Filtro = () => {
                 lista={unidadesEscolares}
                 valueOption="valor"
                 valueText="desc"
-                valueSelect={
-                  unidadeEscolarSelecionada && `${unidadeEscolarSelecionada}`
-                }
+                valueSelect={unidadeEscolarSelecionada}
                 placeholder="Unidade Escolar (UE)"
                 disabled={campoUnidadeEscolarDesabilitado}
               />
@@ -715,7 +644,7 @@ const Filtro = () => {
                   lista={turmas}
                   valueOption="valor"
                   valueText="desc"
-                  valueSelect={turmaSelecionada && `${turmaSelecionada}`}
+                  valueSelect={turmaSelecionada}
                   placeholder="Turma"
                   disabled={campoTurmaDesabilitado}
                 />

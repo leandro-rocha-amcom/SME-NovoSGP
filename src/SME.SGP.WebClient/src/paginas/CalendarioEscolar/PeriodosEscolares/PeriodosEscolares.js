@@ -29,7 +29,7 @@ const PeriodosEscolares = () => {
   const [validacoes, setValidacoes] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
   const [periodoEscolarEdicao, setPeriodoEscolarEdicao] = useState({});
-  const valoresFormInicial = {
+  const [valoresIniciais, setValoresIniciais] = useState({
     primeiroBimestreDataInicial: '',
     primeiroBimestreDataFinal: '',
     segundoBimestreDataInicial: '',
@@ -38,8 +38,7 @@ const PeriodosEscolares = () => {
     terceiroBimestreDataFinal: '',
     quartoBimestreDataInicial: '',
     quartoBimestreDataFinal: '',
-  }
-  const [valoresIniciais, setValoresIniciais] = useState(valoresFormInicial);
+  });
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.PERIODOS_ESCOLARES];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -247,7 +246,6 @@ const PeriodosEscolares = () => {
     }
     setCalendarioEscolarSelecionado(id);
     resetarTela(form);
-    setValoresIniciais({});
     consultarPeriodoPorId(id);
   };
 
@@ -295,6 +293,7 @@ const PeriodosEscolares = () => {
   const resetarTela = form => {
     form.resetForm();
     setModoEdicao(false);
+    setValoresIniciais({});
   };
 
   const onChangeCamposData = () => {
@@ -434,18 +433,6 @@ const PeriodosEscolares = () => {
     );
   };
 
-  const validaAntesDoSubmit = form => {    
-    const arrayCampos = Object.keys(valoresFormInicial);    
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
-    form.validateForm().then(() => {   
-      if (form.isValid || Object.keys(form.errors).length == 0 && Object.keys(form.values).length > 0) {
-        form.handleSubmit(e => e);
-      }      
-    });
-  };
-
   return (
     <>
       <Cabecalho pagina="Cadastro do período escolar" />
@@ -495,7 +482,7 @@ const PeriodosEscolares = () => {
                     color={Colors.Roxo}
                     border
                     bold
-                    onClick={() => validaAntesDoSubmit(form)}
+                    type="submit"
                     disabled={!calendarioEscolarSelecionado || desabilitaCampos}
                   />
                 </div>

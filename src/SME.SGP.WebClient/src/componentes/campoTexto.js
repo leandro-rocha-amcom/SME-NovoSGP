@@ -16,9 +16,6 @@ const Campo = styled.div`
   .ant-input {
     height: 38px;
   }
-  label {
-    font-weight: bold;
-  }
 `;
 
 const CampoTexto = React.forwardRef((props, ref) => {
@@ -74,16 +71,12 @@ const CampoTexto = React.forwardRef((props, ref) => {
               onKeyDown={onKeyDown}
               onChange={e => {
                 form.setFieldValue(name, e.target.value);
-                form.setFieldTouched(name, true, true);
+                form.setFieldTouched(name, true);
                 onChange(e);
               }}
               style={style}
             />
-            {!semMensagem && form && form.touched[name] ? (
-              <span>{form.errors[name]}</span>
-            ) : (
-              ''
-            )}
+            {!semMensagem ? <span>{form.errors[name]}</span> : ''}
           </>
         ) : (
           <Input
