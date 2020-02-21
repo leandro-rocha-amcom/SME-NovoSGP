@@ -30,7 +30,7 @@ function TabGraficos({ dados, periodo, ciclos }) {
         Id: shortid.generate(),
         eixoDescricao: 'Frequencia',
         descricao: 'Frequencia',
-        objetivoDescricao: 'Frequencia dos alunos',
+        objetivoDescricao: 'Frequência dos alunos',
       };
       dadoFrequencia.dados = [];
 
