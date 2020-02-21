@@ -28,8 +28,8 @@ function TabGraficos({ dados, periodo, ciclos }) {
     if (frequenciaDados && frequenciaDados.length) {
       const dadoFrequencia = {
         Id: shortid.generate(),
-        eixoDescricao: 'Frequencia',
-        descricao: 'Frequencia',
+        eixoDescricao: 'Frequência',
+        descricao: 'Frequência',
         objetivoDescricao: 'Frequência dos alunos',
       };
       dadoFrequencia.dados = [];
