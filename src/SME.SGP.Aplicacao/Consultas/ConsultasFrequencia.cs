@@ -277,5 +277,22 @@ namespace SME.SGP.Aplicacao
 
             return _mediaFrequencia;
         }
+
+        public async Task<double> ObterFrequenciaGeralAluno(string alunoCodigo)
+        {
+            var frequenciaAlunoPeriodos = await repositorioFrequenciaAlunoDisciplinaPeriodo.ObterFrequenciaGeralAluno(alunoCodigo);
+
+            if (frequenciaAlunoPeriodos == null || !frequenciaAlunoPeriodos.Any())
+                return 100;
+
+            var frequenciaAluno = new FrequenciaAluno()
+            {
+                TotalAulas = frequenciaAlunoPeriodos.Sum(f => f.TotalAulas),
+                TotalAusencias = frequenciaAlunoPeriodos.Sum(f => f.TotalAusencias),
+                TotalCompensacoes = frequenciaAlunoPeriodos.Sum(f => f.TotalCompensacoes),
+            };
+
+            return frequenciaAluno.PercentualFrequencia;
+        }
     }
 }

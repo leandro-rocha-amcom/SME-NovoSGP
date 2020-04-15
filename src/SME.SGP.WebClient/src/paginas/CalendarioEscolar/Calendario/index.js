@@ -135,8 +135,9 @@ const CalendarioEscolar = () => {
       }
     }
 
-    if (tipos && tipos.length > 0)
+    if (tipos && tipos.length > 0) {
       setTipoCalendarioSelecionado(tipos[0].valor.toString());
+    }
 
     return tipos;
   }, [

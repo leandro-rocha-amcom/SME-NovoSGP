@@ -63,10 +63,15 @@ namespace SME.SGP.IoC
             services.TryAddScopedWorkerService<IComandosFechamentoFinal, ComandosFechamentoFinal>();
             services.TryAddScopedWorkerService<IComandosPeriodoFechamento, ComandosPeriodoFechamento>();
             services.TryAddScopedWorkerService<IComandosFechamentoTurmaDisciplina, ComandosFechamentoTurmaDisciplina>();
-            services.TryAddScopedWorkerService<IComandosNotaConceitoBimestre, ComandosNotaConceitoBimestre>();
+            services.TryAddScopedWorkerService<IComandosFechamentoNota, ComandosFechamentoNota>();
             services.TryAddScopedWorkerService<IComandosNotificacaoAula, ComandosNotificacaoAula>();
             services.TryAddScopedWorkerService<IComandosPendenciaFechamento, ComandosPendenciaFechamento>();
-            services.TryAddScopedWorkerService<IComandosAnotacaoAlunoFechamento, ComandosAnotacaoAlunoFechamento>();
+            services.TryAddScopedWorkerService<IComandosFechamentoAluno, ComandosFechamentoAluno>();
+            services.TryAddScopedWorkerService<IComandosFechamentoTurma, ComandosFechamentoTurma>();
+            services.TryAddScopedWorkerService<IComandosConselhoClasse, ComandosConselhoClasse>();
+            services.TryAddScopedWorkerService<IComandosConselhoClasseAluno, ComandosConselhoClasseAluno>();
+            services.TryAddScopedWorkerService<IComandosConselhoClasseNota, ComandosConselhoClasseNota>();
+            services.TryAddScopedWorkerService<IComandosGrupoComunicacao, ComandosGrupoComunicacao>();
         }
 
         private static void RegistrarConsultas(IServiceCollection services)
@@ -113,11 +118,17 @@ namespace SME.SGP.IoC
             services.TryAddScopedWorkerService<IConsultasProcessoExecutando, ConsultasProcessoExecutando>();
             services.TryAddScopedWorkerService<IConsultasPeriodoFechamento, ConsultasPeriodoFechamento>();
             services.TryAddScopedWorkerService<IConsultasFechamentoTurmaDisciplina, ConsultasFechamentoTurmaDisciplina>();
-            services.TryAddScopedWorkerService<IConsultasNotaConceitoBimestre, ConsultasNotaConceitoBimestre>();
+            services.TryAddScopedWorkerService<IConsultasFechamentoNota, ConsultasFechamentoNota>();
             services.TryAddScopedWorkerService<IConsultasFechamentoReabertura, ConsultasFechamentoReabertura>();
             services.TryAddScopedWorkerService<IConsultasTurma, ConsultasTurma>();
             services.TryAddScopedWorkerService<IConsultasPendenciaFechamento, ConsultasPendenciaFechamento>();
-            services.TryAddScopedWorkerService<IConsultasAnotacaoAlunoFechamento, ConsultasAnotacaoAlunoFechamento>();
+            services.TryAddScopedWorkerService<IConsultasFechamentoAluno, ConsultasFechamentoAluno>();
+            services.TryAddScopedWorkerService<IConsultasFechamentoTurma, ConsultasFechamentoTurma>();
+            services.TryAddScopedWorkerService<IConsultasConselhoClasse, ConsultasConselhoClasse>();
+            services.TryAddScopedWorkerService<IConsultasConselhoClasseAluno, ConsultasConselhoClasseAluno>();
+            services.TryAddScopedWorkerService<IConsultasConselhoClasseNota, ConsultasConselhoClasseNota>();
+            services.TryAddScopedWorkerService<IConsultaGrupoComunicacao, ConsultaGrupoComunicacao>();
+            services.TryAddScopedWorkerService<IConsultasConselhoClasseRecomendacao, ConsultasConselhoClasseRecomendacao>();
         }
 
         private static void RegistrarContextos(IServiceCollection services)
@@ -191,15 +202,21 @@ namespace SME.SGP.IoC
             services.TryAddScopedWorkerService<IRepositorioNotificacaoCompensacaoAusencia, RepositorioNotificacaoCompensacaoAusencia>();
             services.TryAddScopedWorkerService<IRepositorioEventoFechamento, RepositorioEventoFechamento>();
             services.TryAddScopedWorkerService<IRepositorioFechamentoTurmaDisciplina, RepositorioFechamentoTurmaDisciplina>();
-            services.TryAddScopedWorkerService<IRepositorioNotaConceitoBimestre, RepositorioNotaConceitoBimestre>();
+            services.TryAddScopedWorkerService<IRepositorioFechamentoNota, RepositorioFechamentoNota>();
             services.TryAddScopedWorkerService<IRepositorioFechamentoReabertura, RepositorioFechamentoReabertura>();
             services.TryAddScopedWorkerService<IRepositorioNotificacaoAula, RepositorioNotificacaoAula>();
             services.TryAddScopedWorkerService<IRepositorioHistoricoEmailUsuario, RepositorioHistoricoEmailUsuario>();
-            services.TryAddScopedWorkerService<IRepositorioFechamentoFinal, RepositorioFechamentoFinal>();
             services.TryAddScopedWorkerService<IRepositorioPendencia, RepositorioPendencia>();
             services.TryAddScopedWorkerService<IRepositorioPendenciaFechamento, RepositorioPendenciaFechamento>();
             services.TryAddScopedWorkerService<IRepositorioSintese, RepositorioSintese>();
-            services.TryAddScopedWorkerService<IRepositorioAnotacaoAlunoFechamento, RepositorioAnotacaoAlunoFechamento>();
+            services.TryAddScopedWorkerService<IRepositorioFechamentoAluno, RepositorioFechamentoAluno>();
+            services.TryAddScopedWorkerService<IRepositorioFechamentoTurma, RepositorioFechamentoTurma>();
+            services.TryAddScopedWorkerService<IRepositorioConselhoClasse, RepositorioConselhoClasse>();
+            services.TryAddScopedWorkerService<IRepositorioConselhoClasseAluno, RepositorioConselhoClasseAluno>();
+            services.TryAddScopedWorkerService<IRepositorioConselhoClasseNota, RepositorioConselhoClasseNota>();
+            services.TryAddScopedWorkerService<IRepositorioGrupoComunicacao, RepositorioGrupoComunicacao>();
+            services.TryAddScopedWorkerService<IRepositorioWfAprovacaoNotaFechamento, RepositorioWfAprovacaoNotaFechamento>();
+            services.TryAddScopedWorkerService<IRepositorioConselhoClasseRecomendacao, RepositorioConselhoClasseRecomendacao>();
         }
 
         private static void RegistrarServicos(IServiceCollection services)
@@ -233,6 +250,7 @@ namespace SME.SGP.IoC
             services.TryAddScopedWorkerService<IServicoPeriodoFechamento, ServicoPeriodoFechamento>();
             services.TryAddScopedWorkerService<IServicoFechamentoTurmaDisciplina, ServicoFechamentoTurmaDisciplina>();
             services.TryAddScopedWorkerService<IServicoPendenciaFechamento, ServicoPendenciaFechamento>();
+            services.TryAddScopedWorkerService<IServicoConselhoClasse, ServicoConselhoClasse>();
         }
 
         private static void ResgistraDependenciaHttp(IServiceCollection services)
