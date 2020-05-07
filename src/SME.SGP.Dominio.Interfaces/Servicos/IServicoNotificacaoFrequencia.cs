@@ -5,7 +5,7 @@ namespace SME.SGP.Dominio.Interfaces
 {
     public interface IServicoNotificacaoFrequencia
     {
-        void ExecutaNotificacaoRegistroFrequencia();
+        Task ExecutaNotificacaoRegistroFrequencia();
 
         void NotificarAlunosFaltosos();
 

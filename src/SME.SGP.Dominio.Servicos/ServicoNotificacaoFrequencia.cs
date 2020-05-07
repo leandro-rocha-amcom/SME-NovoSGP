@@ -74,7 +74,7 @@ namespace SME.SGP.Dominio.Servicos
 
         #region Metodos Publicos
 
-        public void ExecutaNotificacaoRegistroFrequencia()
+        public async Task ExecutaNotificacaoRegistroFrequencia()
         {
             var cargosNotificados = new List<(string, Cargo?)>();
 
@@ -475,7 +475,7 @@ namespace SME.SGP.Dominio.Servicos
             servicoNotificacao.Salvar(notificacao);
         }
 
-        private void NotificarAusenciaFrequencia(TipoNotificacaoFrequencia tipo, ref List<(string, Cargo?)> cargosNotificados)
+        private async Task NotificarAusenciaFrequencia(TipoNotificacaoFrequencia tipo, List<(string, Cargo?)> cargosNotificados)
         {
             // Busca registro de aula sem frequencia e sem notificação do tipo
             IEnumerable<RegistroFrequenciaFaltanteDto> turmasSemRegistro = null;
@@ -485,7 +485,7 @@ namespace SME.SGP.Dominio.Servicos
             {
                 // Busca parametro do sistema de quantidade de aulas sem frequencia para notificação
                 var qtdAulasNotificacao = QuantidadeAulasParaNotificacao(tipo);
-                if (qtdAulasNotificacao > 0)
+                if (qtdAulasNotificacao.HasValue)
                     foreach (var turma in turmasSemRegistro)
                     {
                         // Carrega todas as aulas sem registro de frequencia da turma e disciplina para notificação
@@ -705,7 +705,7 @@ namespace SME.SGP.Dominio.Servicos
             return disciplina.FirstOrDefault().Nome;
         }
 
-        private int QuantidadeAulasParaNotificacao(TipoNotificacaoFrequencia tipo)
+        private int? QuantidadeAulasParaNotificacao(TipoNotificacaoFrequencia tipo)
         {
             TipoParametroSistema tipoParametroSistema;
             switch (tipo)
@@ -732,7 +732,7 @@ namespace SME.SGP.Dominio.Servicos
             if (!string.IsNullOrWhiteSpace(parametroQuantidadeAulas))
                 return int.Parse(parametroQuantidadeAulas);
 
-            return 0;
+            return null;
         }
 
         private void VerificaNotificacaoBimestralCalendario(TipoCalendario tipoCalendario, DateTime dataAtual, ModalidadeTipoCalendario modalidade)
