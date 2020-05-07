@@ -2,6 +2,6 @@
 {
     public interface IServicoNotificacaoAulaPrevista
     {
-       void ExecutaNotificacaoAulaPrevista();
+        void ExecutaNotificacaoAulaPrevista();
     }
 }

@@ -4,19 +4,18 @@ using SME.SGP.Infra;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SGP.Dominio.Servicos
 {
     public class ServicoNotificacaoAulaPrevista : IServicoNotificacaoAulaPrevista
     {
-        private readonly IRepositorioParametrosSistema repositorioParametrosSistema;
-        private readonly IRepositorioNotificacaoAulaPrevista repositorioNotificacaoAulaPrevista;
+        private readonly IConfiguration configuration;
         private readonly IRepositorioAulaPrevista repositorioAulaPrevista;
+        private readonly IRepositorioNotificacaoAulaPrevista repositorioNotificacaoAulaPrevista;
+        private readonly IRepositorioParametrosSistema repositorioParametrosSistema;
         private readonly IRepositorioPeriodoEscolar repositorioPeriodoEscolar;
         private readonly IServicoNotificacao servicoNotificacao;
         private readonly IServicoUsuario servicoUsuario;
-        private readonly IConfiguration configuration;
 
         public ServicoNotificacaoAulaPrevista(IRepositorioParametrosSistema repositorioParametrosSistema,
                                             IRepositorioNotificacaoAulaPrevista repositorioNotificacaoAulaPrevista,
@@ -55,14 +54,11 @@ namespace SME.SGP.Dominio.Servicos
                 if (usuarios != null)
                     foreach (var usuario in usuarios)
                     {
-                        if(!repositorioNotificacaoAulaPrevista.UsuarioNotificado(usuario.Id, turma.Bimestre, turma.CodigoTurma, turma.DisciplinaId))
+                        if (!repositorioNotificacaoAulaPrevista.UsuarioNotificado(usuario.Id, turma.Bimestre, turma.CodigoTurma, turma.DisciplinaId))
                             NotificaRegistroDivergencia(usuario, turma);
                     }
             }
         }
-
-        private int QuantidadeDiasFimBimestreParaNotificacao()
-            => int.Parse(repositorioParametrosSistema.ObterValorPorTipoEAno(TipoParametroSistema.QuantidadeDiasNotificarProfessor));
 
         private IEnumerable<Usuario> BuscaProfessorAula(RegistroAulaPrevistaDivergenteDto turma)
         {
@@ -107,5 +103,8 @@ namespace SME.SGP.Dominio.Servicos
                 DisciplinaId = registroAulaPrevistaDivergente.DisciplinaId,
             });
         }
+
+        private int QuantidadeDiasFimBimestreParaNotificacao()
+                            => int.Parse(repositorioParametrosSistema.ObterValorPorTipoEAno(TipoParametroSistema.QuantidadeDiasNotificarProfessor));
     }
 }
